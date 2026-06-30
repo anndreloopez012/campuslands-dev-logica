@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Plataforma interactiva Campuslands para practicar logica con pruebas aleatorias por nivel.">
+    <title>Campuslands Logic Arena</title>
+    <link rel="stylesheet" href="./assets/styles.css">
+  </head>
+  <body>
+    <div class="scanline" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Campuslands Logic Arena">
+        <span class="brand-mark">CL</span>
+        <span>
+          <strong>Campuslands</strong>
+          <small>Logic Arena</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Navegacion principal">
+        <a href="#niveles">Niveles</a>
+        <a href="#prueba">Practica</a>
+        <a href="#historial">Historial</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="inicio">
+        <div class="hero-copy">
+          <p class="eyebrow">terminal.training/campuslands</p>
+          <h1>Entrena logica con pruebas aleatorias, tiempo real y reporte listo para Git.</h1>
+          <p>
+            Una arena de practica para estudiantes que quieren mejorar analisis, patrones,
+            razonamiento matematico y toma de decisiones antes de resolver ejercicios formales.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#prueba">Iniciar practica</a>
+            <a class="button ghost" href="#niveles">Ver niveles</a>
+          </div>
+        </div>
+        <aside class="terminal-card" aria-label="Resumen de plataforma">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <pre><code>&gt; boot logic-arena
+variants: 300
+levels: facil/intermedio/dificil/experto/ultra
+mode: random
+result: markdown + json
+target: git workflow</code></pre>
+        </aside>
+      </section>
+
+      <section class="stats-band" aria-label="Metricas de practica">
+        <div><strong>300</strong><span>variantes base</span></div>
+        <div><strong>5</strong><span>niveles progresivos</span></div>
+        <div><strong>10-15</strong><span>preguntas por prueba</span></div>
+        <div><strong>0</strong><span>respuestas lineales</span></div>
+      </section>
+
+      <section class="levels" id="niveles">
+        <div class="section-title">
+          <p class="eyebrow">seleccion de dificultad</p>
+          <h2>Niveles de entrenamiento</h2>
+        </div>
+        <div class="level-grid" id="levelGrid"></div>
+      </section>
+
+      <section class="practice-shell" id="prueba">
+        <div class="setup-panel" id="setupPanel">
+          <div class="section-title compact">
+            <p class="eyebrow">nueva prueba</p>
+            <h2>Configura tu sesion</h2>
+          </div>
+          <form id="setupForm" class="setup-form">
+            <label>
+              Usuario de GitHub
+              <input id="githubUser" name="githubUser" autocomplete="username" placeholder="ejemplo: andres-dev" required pattern="[A-Za-z0-9-]{2,39}">
+            </label>
+            <label>
+              Nivel
+              <select id="levelSelect" name="levelSelect"></select>
+            </label>
+            <button class="button primary full" type="submit">Generar prueba aleatoria</button>
+          </form>
+          <p class="microcopy">
+            Cada intento mezcla preguntas distintas del banco del nivel seleccionado. El resultado queda guardado en este navegador y se puede exportar para subirlo al repositorio.
+          </p>
+        </div>
+
+        <div class="quiz-panel hidden" id="quizPanel" aria-live="polite">
+          <div class="quiz-header">
+            <div>
+              <p class="eyebrow" id="quizMeta">prueba activa</p>
+              <h2 id="quizTitle">Nivel</h2>
+            </div>
+            <div class="timer" id="timer">00:00</div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label">
+              <span id="questionCounter">Pregunta 1 de 10</span>
+              <span id="scorePreview">0 pts</span>
+            </div>
+            <div class="progress-track"><div id="progressBar"></div></div>
+          </div>
+          <article class="question-card">
+            <div class="question-points" id="questionPoints">10 pts</div>
+            <h3 id="questionText"></h3>
+            <p id="questionDetail"></p>
+            <div class="options" id="optionsList"></div>
+          </article>
+          <div class="quiz-actions">
+            <button class="button ghost" id="prevQuestion" type="button">Anterior</button>
+            <button class="button ghost" id="clearAnswer" type="button">Limpiar</button>
+            <button class="button primary" id="nextQuestion" type="button">Siguiente</button>
+            <button class="button danger hidden" id="finishQuiz" type="button">Finalizar prueba</button>
+          </div>
+        </div>
+
+        <div class="results-panel hidden" id="resultsPanel">
+          <div class="section-title compact">
+            <p class="eyebrow">resultado</p>
+            <h2 id="resultTitle">Reporte final</h2>
+          </div>
+          <div class="result-summary" id="resultSummary"></div>
+          <div class="result-actions">
+            <button class="button primary" id="downloadMarkdown" type="button">Descargar Markdown</button>
+            <button class="button ghost" id="downloadJson" type="button">Descargar JSON</button>
+            <button class="button ghost" id="copyReport" type="button">Copiar reporte</button>
+            <button class="button ghost" id="newAttempt" type="button">Nuevo intento</button>
+          </div>
+          <div class="review-list" id="reviewList"></div>
+          <details class="git-delivery">
+            <summary>Como subir este resultado al repo</summary>
+            <ol>
+              <li>Crea una rama desde <code>dev</code>.</li>
+              <li>Guarda el Markdown en <code>resultados/tu-usuario-github/</code>.</li>
+              <li>Haz commit con formato <code>docs(resultados): agregar practica de usuario</code>.</li>
+              <li>Haz push y abre Pull Request hacia <code>dev</code>.</li>
+            </ol>
+          </details>
+        </div>
+      </section>
+
+      <section class="history" id="historial">
+        <div class="section-title">
+          <p class="eyebrow">progreso local</p>
+          <h2>Historial de intentos</h2>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Campuslands Dev Logica</span>
+      <span>Practica interactiva sin credenciales en cliente</span>
+    </footer>
+
+    <script src="./assets/app.js" defer></script>
+  </body>
+</html>

@@ -34,8 +34,10 @@ jobs:
             const errors = [];
             const warnings = [];
             const changedFiles = files.map((file) => file.filename);
+            const isMaintenanceBranch = /^codex\//.test(pr.head.ref || '');
 
             const resolutionPath = /(^|\/)resoluciones\/([a-z0-9]+(?:-[a-z0-9]+)+)\/.+/;
+            const resultPath = /^resultados\/([a-z0-9]+(?:-[a-z0-9]+)*)\/.+\.(md|json)$/;
             const forbiddenPaths = [
               { pattern: /^\.vscode\//, reason: 'No subas configuracion local del editor como .vscode/.' },
               { pattern: /^\.idea\//, reason: 'No subas configuracion local del editor como .idea/.' },
@@ -43,13 +45,15 @@ jobs:
               { pattern: /(^|\/)node_modules\//, reason: 'No subas dependencias generadas como node_modules/.' },
             ];
 
-            if (pr.base.ref === 'main') {
+            if (isMaintenanceBranch) {
+              warnings.push('Rama de mantenimiento detectada. Se permite modificar documentacion, plataforma y configuracion oficial.');
+            } else if (pr.base.ref === 'main') {
               errors.push(
                 'Este Pull Request apunta a main. main es produccion y no recibe entregas de alumnos. Cierra este PR y abre uno nuevo hacia dev desde tu rama personal.'
               );
             }
 
-            if (!pr.head.ref || pr.head.ref === 'main' || pr.head.ref === 'dev') {
+            if (!isMaintenanceBranch && (!pr.head.ref || pr.head.ref === 'main' || pr.head.ref === 'dev')) {
               errors.push(
                 'La rama de trabajo no puede llamarse main ni dev. Usa una rama personal, por ejemplo alumno/nombre-apellido/ejercicio-01.'
               );
@@ -64,9 +68,13 @@ jobs:
                 }
               }
 
-              if (!resolutionPath.test(path)) {
+              if (isMaintenanceBranch) {
+                continue;
+              }
+
+              if (!resolutionPath.test(path) && !resultPath.test(path)) {
                 errors.push(
-                  `${path}: la entrega debe ir dentro de una carpeta personal en resoluciones/{nombre-apellido}/.`
+                  `${path}: la entrega debe ir dentro de una carpeta personal en resoluciones/{nombre-apellido}/ o resultados/{usuario-github}/.`
                 );
                 continue;
               }
