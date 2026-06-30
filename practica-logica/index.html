@@ -125,18 +125,20 @@ target: git workflow</code></pre>
           <div class="result-actions">
             <button class="button primary" id="downloadMarkdown" type="button">Descargar Markdown</button>
             <button class="button ghost" id="downloadJson" type="button">Descargar JSON</button>
+            <button class="button primary" id="uploadToGit" type="button">Subir al ranking global</button>
             <button class="button ghost" id="copyReport" type="button">Copiar reporte</button>
             <button class="button ghost" id="retrySameLevel" type="button">Repetir nivel</button>
             <button class="button ghost" id="newAttempt" type="button">Nuevo intento</button>
           </div>
+          <p class="microcopy" id="uploadStatus">Para competir con todos, sube el resultado al ranking global despues de finalizar.</p>
           <div class="review-list" id="reviewList"></div>
           <details class="git-delivery">
             <summary>Como subir este resultado al repo</summary>
             <ol>
-              <li>Crea una rama desde <code>dev</code>.</li>
-              <li>Guarda el Markdown en <code>resultados/tu-usuario-github/</code>.</li>
-              <li>Haz commit con formato <code>docs(resultados): agregar practica de usuario</code>.</li>
-              <li>Haz push y abre Pull Request hacia <code>dev</code>.</li>
+              <li>Haz clic en <strong>Subir al ranking global</strong>.</li>
+              <li>GitHub abrira un issue con tu resultado en JSON.</li>
+              <li>Publica el issue sin modificar el contenido.</li>
+              <li>El bot valida el resultado, lo guarda en Git y actualiza la base de datos del ranking.</li>
             </ol>
           </details>
         </div>

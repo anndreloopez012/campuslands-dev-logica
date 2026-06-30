@@ -1,0 +1,75 @@
+name: Ingestar resultado Logic Arena
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  ingest:
+    name: Guardar resultado en DB Git
+    if: startsWith(github.event.issue.title, '[logic-arena-result]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar scripts
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: source
+
+      - name: Descargar rama de datos
+        uses: actions/checkout@v4
+        with:
+          ref: resultados-db
+          path: data
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validar y guardar resultado
+        id: ingest
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          DATA_DIR: data
+        run: node source/.github/scripts/ingest-logic-result.js
+
+      - name: Commit de resultado
+        if: steps.ingest.outputs.valid == 'true'
+        working-directory: data
+        run: |
+          git config user.name "campuslands-bot"
+          git config user.email "actions@github.com"
+          git add resultados practica-logica/data/results.json
+          if git diff --cached --quiet; then
+            echo "No hay cambios nuevos para guardar."
+          else
+            git commit -m "data(logic-arena): guardar resultado #${{ github.event.issue.number }}"
+            git push origin resultados-db
+          fi
+
+      - name: Comentar resultado
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const statusPath = 'data/.ingest-status.md';
+            const body = fs.existsSync(statusPath)
+              ? fs.readFileSync(statusPath, 'utf8')
+              : 'No se pudo leer el estado del procesamiento.';
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body,
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              state: 'closed',
+            });

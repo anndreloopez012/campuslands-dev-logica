@@ -1,6 +1,8 @@
 const REPO_URL = "https://github.com/anndreloopez012/campuslands-dev-logica";
 const RESULTS_API = "https://api.github.com/repos/anndreloopez012/campuslands-dev-logica/git/trees/main?recursive=1";
 const RAW_BASE = "https://raw.githubusercontent.com/anndreloopez012/campuslands-dev-logica/main";
+const GLOBAL_RESULTS_DB = "https://raw.githubusercontent.com/anndreloopez012/campuslands-dev-logica/resultados-db/practica-logica/data/results.json";
+const RESULT_ISSUE_URL = "https://github.com/anndreloopez012/campuslands-dev-logica/issues/new";
 const STORAGE_KEY = "campuslands.logicArena.results";
 
 const LEVELS = {
@@ -553,6 +555,14 @@ function renderRanking() {
 async function loadPublishedResults() {
   try {
     $("#rankingStatus").textContent = "Sincronizando ranking con resultados publicados...";
+    const dbResponse = await fetch(`${GLOBAL_RESULTS_DB}?t=${Date.now()}`, { cache: "no-store" });
+    if (dbResponse.ok) {
+      const db = await dbResponse.json();
+      state.publishedResults = (db.results || []).map((result) => normalizeResult({ ...result, source: "repo" }));
+      renderRanking();
+      return;
+    }
+
     const treeResponse = await fetch(RESULTS_API, { headers: { Accept: "application/vnd.github+json" } });
     if (!treeResponse.ok) throw new Error(`GitHub API ${treeResponse.status}`);
     const tree = await treeResponse.json();
@@ -570,6 +580,29 @@ async function loadPublishedResults() {
     $("#rankingStatus").textContent = `Ranking local activo. No se pudo sincronizar resultados publicados: ${error.message}.`;
   }
   renderRanking();
+}
+
+function buildGlobalUploadUrl(result) {
+  const payload = {
+    ...result,
+    source: "local"
+  };
+  const title = `[logic-arena-result] ${result.user} ${result.id}`;
+  const body = [
+    "Resultado generado por Campuslands Logic Arena.",
+    "",
+    "No modifiques el JSON. El bot validara que el usuario del resultado coincida con tu cuenta de GitHub.",
+    "",
+    "```json",
+    JSON.stringify(payload, null, 2),
+    "```"
+  ].join("\n");
+  const params = new URLSearchParams({
+    title,
+    body,
+    labels: "logic-arena-result"
+  });
+  return `${RESULT_ISSUE_URL}?${params.toString()}`;
 }
 
 function buildMarkdown(result) {
@@ -671,6 +704,12 @@ function wireEvents() {
     const result = latestResult();
     if (!result) return;
     downloadFile(`${result.id}.json`, JSON.stringify(result, null, 2), "application/json;charset=utf-8");
+  });
+  $("#uploadToGit").addEventListener("click", () => {
+    const result = latestResult();
+    if (!result) return;
+    $("#uploadStatus").textContent = "Abriendo GitHub para subir el resultado al ranking global...";
+    window.open(buildGlobalUploadUrl(result), "_blank", "noopener,noreferrer");
   });
   $("#copyReport").addEventListener("click", async () => {
     const result = latestResult();
