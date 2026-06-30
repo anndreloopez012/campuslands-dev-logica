@@ -32,3 +32,12 @@ La pagina no expone tokens ni escribe directamente en GitHub desde el navegador.
 4. El estudiante sube el resultado por rama personal y Pull Request hacia `dev`.
 
 Esto evita publicar credenciales y mantiene el mismo flujo profesional del repositorio.
+
+## Ranking
+
+La plataforma muestra un ranking con dos fuentes:
+
+- Resultados locales guardados en el navegador.
+- Resultados publicados en el repositorio dentro de `resultados/{usuario-github}/` en formato JSON.
+
+Cada estudiante puede filtrar por nivel, ver su historial, repetir una prueba del mismo nivel y revisar pregunta por pregunta cuales respuestas fueron correctas o incorrectas.

@@ -1,4 +1,6 @@
 const REPO_URL = "https://github.com/anndreloopez012/campuslands-dev-logica";
+const RESULTS_API = "https://api.github.com/repos/anndreloopez012/campuslands-dev-logica/git/trees/main?recursive=1";
+const RAW_BASE = "https://raw.githubusercontent.com/anndreloopez012/campuslands-dev-logica/main";
 const STORAGE_KEY = "campuslands.logicArena.results";
 
 const LEVELS = {
@@ -46,7 +48,9 @@ const state = {
   answers: [],
   remaining: 0,
   timerId: null,
-  lastReport: ""
+  lastReport: "",
+  publishedResults: [],
+  lastLevelKey: "facil"
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -213,8 +217,12 @@ function slugify(value) {
 function renderLevels() {
   const grid = $("#levelGrid");
   const select = $("#levelSelect");
+  const rankingLevel = $("#rankingLevel");
+  const historyLevel = $("#historyLevelFilter");
   grid.innerHTML = "";
   select.innerHTML = "";
+  rankingLevel.innerHTML = "<option value=\"todos\">Todos</option>";
+  historyLevel.innerHTML = "<option value=\"todos\">Todos</option>";
 
   Object.entries(LEVELS).forEach(([key, level]) => {
     const card = document.createElement("article");
@@ -235,6 +243,16 @@ function renderLevels() {
     option.value = key;
     option.textContent = `${level.label} - ${level.questions} preguntas`;
     select.appendChild(option);
+
+    const rankOption = document.createElement("option");
+    rankOption.value = key;
+    rankOption.textContent = level.label;
+    rankingLevel.appendChild(rankOption);
+
+    const historyOption = document.createElement("option");
+    historyOption.value = key;
+    historyOption.textContent = level.label;
+    historyLevel.appendChild(historyOption);
   });
 
   grid.addEventListener("click", (event) => {
@@ -258,6 +276,7 @@ function startQuiz(event) {
   }
 
   const questions = shuffle(state.bank[levelKey]).slice(0, level.questions);
+  state.lastLevelKey = levelKey;
   state.current = {
     id: `logic-${Date.now()}`,
     user,
@@ -314,6 +333,7 @@ function renderQuestion() {
     button.textContent = option.text;
     button.addEventListener("click", () => {
       state.answers[state.index] = option.text;
+      button.classList.add("pulse-once");
       renderQuestion();
     });
     options.appendChild(button);
@@ -347,8 +367,10 @@ function finishQuiz() {
     secondsUsed: (LEVELS[state.current.levelKey].minutes * 60) - Math.max(state.remaining, 0),
     score,
     maxScore,
+    percent: Math.round((score / maxScore) * 100),
     correct,
     total: state.current.questions.length,
+    source: "local",
     answers: state.current.questions.map((question, index) => ({
       id: question.id,
       title: question.title,
@@ -365,6 +387,7 @@ function finishQuiz() {
   saveResult(result);
   state.lastReport = buildMarkdown(result);
   renderResults(result);
+  renderRanking();
 }
 
 function renderResults(result) {
@@ -402,28 +425,151 @@ function renderResults(result) {
 function saveResult(result) {
   const previous = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   previous.unshift(result);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(previous.slice(0, 20)));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(previous.slice(0, 80)));
 }
 
 function renderHistory() {
-  const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  const history = getLocalResults();
   const list = $("#historyList");
+  const userFilter = slugify($("#historyUserFilter").value || "");
+  const levelFilter = $("#historyLevelFilter").value;
+  const resultFilter = $("#historyResultFilter").value;
+  const filtered = history.filter((result) => {
+    const percent = normalizeResult(result).percent;
+    const matchUser = !userFilter || result.user.includes(userFilter);
+    const matchLevel = levelFilter === "todos" || result.levelKey === levelFilter;
+    const matchResult = resultFilter === "todos"
+      || (resultFilter === "aprobado" && percent >= 70)
+      || (resultFilter === "repasar" && percent < 70);
+    return matchUser && matchLevel && matchResult;
+  });
   list.innerHTML = "";
 
-  if (history.length === 0) {
-    list.innerHTML = "<p class=\"microcopy\">Aun no hay intentos guardados en este navegador.</p>";
+  if (filtered.length === 0) {
+    list.innerHTML = "<p class=\"microcopy\">No hay intentos que coincidan con los filtros actuales.</p>";
     return;
   }
 
-  history.forEach((result) => {
+  filtered.forEach((result) => {
+    const normalized = normalizeResult(result);
     const item = document.createElement("article");
     item.className = "history-item";
     item.innerHTML = `
-      <h3>${result.user} / ${result.level}</h3>
-      <p>${new Date(result.finishedAt).toLocaleString()} - ${result.score}/${result.maxScore} pts - ${result.correct}/${result.total} correctas</p>
+      <div>
+        <h3>${result.user} / ${result.level}</h3>
+        <p>${new Date(result.finishedAt).toLocaleString()} - ${result.score}/${result.maxScore} pts - ${result.correct}/${result.total} correctas - ${normalized.percent}%</p>
+      </div>
+      <div class="history-actions">
+        <button class="button ghost" type="button" data-review="${result.id}">Ver respuestas</button>
+        <button class="button ghost" type="button" data-repeat="${result.levelKey}">Repetir</button>
+      </div>
     `;
     list.appendChild(item);
   });
+}
+
+function getLocalResults() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]").map((result) => normalizeResult({ ...result, source: "local" }));
+}
+
+function normalizeResult(result) {
+  const maxScore = Number(result.maxScore || 0);
+  const score = Number(result.score || 0);
+  return {
+    ...result,
+    percent: maxScore > 0 ? Math.round((score / maxScore) * 100) : 0,
+    source: result.source || "local"
+  };
+}
+
+function getCombinedResults() {
+  const source = $("#rankingSource").value;
+  const local = getLocalResults();
+  const repo = state.publishedResults.map((result) => normalizeResult({ ...result, source: "repo" }));
+  if (source === "local") return local;
+  if (source === "repo") return repo;
+  return [...local, ...repo];
+}
+
+function bestPerUser(results) {
+  const byUser = new Map();
+  results.forEach((result) => {
+    const current = byUser.get(result.user);
+    if (!current || result.percent > current.percent || (result.percent === current.percent && result.score > current.score)) {
+      byUser.set(result.user, result);
+    }
+  });
+  return [...byUser.values()].sort((a, b) => b.percent - a.percent || b.score - a.score || a.secondsUsed - b.secondsUsed);
+}
+
+function renderRanking() {
+  const level = $("#rankingLevel").value;
+  const results = getCombinedResults()
+    .filter((result) => level === "todos" || result.levelKey === level)
+    .map(normalizeResult);
+  const leaders = bestPerUser(results);
+  const podium = $("#podium");
+  const list = $("#rankingList");
+  podium.innerHTML = "";
+  list.innerHTML = "";
+
+  if (leaders.length === 0) {
+    podium.innerHTML = "<p class=\"microcopy\">Aun no hay resultados para mostrar. Termina una prueba o sube archivos JSON a resultados/.</p>";
+    $("#rankingStatus").textContent = `Ranking listo. Locales: ${getLocalResults().length}. Publicados: ${state.publishedResults.length}.`;
+    return;
+  }
+
+  leaders.slice(0, 3).forEach((result, index) => {
+    const card = document.createElement("article");
+    card.className = `podium-card rank-${index + 1}`;
+    card.innerHTML = `
+      <span class="rank-badge">#${index + 1}</span>
+      <h3>${result.user}</h3>
+      <p>${result.level} / ${result.percent}%</p>
+      <strong>${result.score}/${result.maxScore} pts</strong>
+      <small>${result.correct}/${result.total} correctas - ${result.source === "repo" ? "repo" : "local"}</small>
+    `;
+    podium.appendChild(card);
+  });
+
+  leaders.forEach((result, index) => {
+    const row = document.createElement("article");
+    row.className = "ranking-row";
+    row.innerHTML = `
+      <span class="rank-number">${index + 1}</span>
+      <div>
+        <h3>${result.user}</h3>
+        <p>${result.level} - ${new Date(result.finishedAt).toLocaleDateString()} - ${result.source === "repo" ? "publicado" : "local"}</p>
+      </div>
+      <strong>${result.percent}%</strong>
+      <span>${result.score}/${result.maxScore}</span>
+    `;
+    list.appendChild(row);
+  });
+
+  $("#rankingStatus").textContent = `Mostrando ${leaders.length} competidores. Locales: ${getLocalResults().length}. Publicados: ${state.publishedResults.length}.`;
+}
+
+async function loadPublishedResults() {
+  try {
+    $("#rankingStatus").textContent = "Sincronizando ranking con resultados publicados...";
+    const treeResponse = await fetch(RESULTS_API, { headers: { Accept: "application/vnd.github+json" } });
+    if (!treeResponse.ok) throw new Error(`GitHub API ${treeResponse.status}`);
+    const tree = await treeResponse.json();
+    const files = (tree.tree || [])
+      .filter((entry) => /^resultados\/[^/]+\/.+\.json$/.test(entry.path))
+      .slice(0, 80);
+    const loaded = await Promise.all(files.map(async (entry) => {
+      const response = await fetch(`${RAW_BASE}/${entry.path}`);
+      if (!response.ok) return null;
+      const result = await response.json();
+      return normalizeResult({ ...result, source: "repo" });
+    }));
+    state.publishedResults = loaded.filter(Boolean);
+  } catch (error) {
+    $("#rankingStatus").textContent = `Ranking local activo. No se pudo sincronizar resultados publicados: ${error.message}.`;
+  }
+  renderRanking();
 }
 
 function buildMarkdown(result) {
@@ -476,6 +622,15 @@ function latestResult() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")[0] || null;
 }
 
+function repeatLevel(levelKey) {
+  $("#levelSelect").value = levelKey || state.lastLevelKey || "facil";
+  const lastUser = latestResult()?.user || $("#githubUser").value;
+  if (lastUser) $("#githubUser").value = lastUser;
+  $("#resultsPanel").classList.add("hidden");
+  $("#setupPanel").classList.remove("hidden");
+  $("#prueba").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function wireEvents() {
   $("#setupForm").addEventListener("submit", startQuiz);
   $("#prevQuestion").addEventListener("click", () => moveQuestion(-1));
@@ -489,6 +644,23 @@ function wireEvents() {
     $("#resultsPanel").classList.add("hidden");
     $("#setupPanel").classList.remove("hidden");
     $("#prueba").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("#retrySameLevel").addEventListener("click", () => repeatLevel(latestResult()?.levelKey));
+  $("#rankingLevel").addEventListener("change", renderRanking);
+  $("#rankingSource").addEventListener("change", renderRanking);
+  $("#refreshRanking").addEventListener("click", loadPublishedResults);
+  $("#historyUserFilter").addEventListener("input", renderHistory);
+  $("#historyLevelFilter").addEventListener("change", renderHistory);
+  $("#historyResultFilter").addEventListener("change", renderHistory);
+  $("#historyList").addEventListener("click", (event) => {
+    const reviewButton = event.target.closest("[data-review]");
+    const repeatButton = event.target.closest("[data-repeat]");
+    if (reviewButton) {
+      const result = getLocalResults().find((item) => item.id === reviewButton.dataset.review);
+      if (result) renderResults(result);
+      $("#prueba").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (repeatButton) repeatLevel(repeatButton.dataset.repeat);
   });
   $("#downloadMarkdown").addEventListener("click", () => {
     const result = latestResult();
@@ -514,4 +686,6 @@ function wireEvents() {
 buildBank();
 renderLevels();
 renderHistory();
+renderRanking();
+loadPublishedResults();
 wireEvents();

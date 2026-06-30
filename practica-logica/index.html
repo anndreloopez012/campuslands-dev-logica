@@ -20,6 +20,7 @@
       <nav class="nav" aria-label="Navegacion principal">
         <a href="#niveles">Niveles</a>
         <a href="#prueba">Practica</a>
+        <a href="#ranking">Ranking</a>
         <a href="#historial">Historial</a>
       </nav>
     </header>
@@ -125,6 +126,7 @@ target: git workflow</code></pre>
             <button class="button primary" id="downloadMarkdown" type="button">Descargar Markdown</button>
             <button class="button ghost" id="downloadJson" type="button">Descargar JSON</button>
             <button class="button ghost" id="copyReport" type="button">Copiar reporte</button>
+            <button class="button ghost" id="retrySameLevel" type="button">Repetir nivel</button>
             <button class="button ghost" id="newAttempt" type="button">Nuevo intento</button>
           </div>
           <div class="review-list" id="reviewList"></div>
@@ -140,10 +142,59 @@ target: git workflow</code></pre>
         </div>
       </section>
 
+      <section class="ranking" id="ranking">
+        <div class="section-title">
+          <p class="eyebrow">tabla competitiva</p>
+          <h2>Ranking de puntuaciones</h2>
+        </div>
+        <div class="ranking-shell">
+          <div class="ranking-toolbar">
+            <label>
+              Nivel
+              <select id="rankingLevel">
+                <option value="todos">Todos</option>
+              </select>
+            </label>
+            <label>
+              Origen
+              <select id="rankingSource">
+                <option value="todos">Local + repo</option>
+                <option value="local">Solo este navegador</option>
+                <option value="repo">Solo resultados publicados</option>
+              </select>
+            </label>
+            <button class="button ghost" id="refreshRanking" type="button">Actualizar ranking</button>
+          </div>
+          <div class="podium" id="podium"></div>
+          <div class="ranking-list" id="rankingList"></div>
+          <p class="microcopy" id="rankingStatus">El ranking combina intentos locales y archivos JSON publicados en resultados/.</p>
+        </div>
+      </section>
+
       <section class="history" id="historial">
         <div class="section-title">
           <p class="eyebrow">progreso local</p>
           <h2>Historial de intentos</h2>
+        </div>
+        <div class="history-filters">
+          <label>
+            Usuario
+            <input id="historyUserFilter" placeholder="filtrar por usuario">
+          </label>
+          <label>
+            Nivel
+            <select id="historyLevelFilter">
+              <option value="todos">Todos</option>
+            </select>
+          </label>
+          <label>
+            Resultado
+            <select id="historyResultFilter">
+              <option value="todos">Todos</option>
+              <option value="aprobado">70% o mas</option>
+              <option value="repasar">Menos de 70%</option>
+            </select>
+          </label>
         </div>
         <div class="history-list" id="historyList"></div>
       </section>

@@ -34,6 +34,7 @@ body {
   color: var(--ink);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   letter-spacing: 0;
+  overflow-x: hidden;
 }
 
 button,
@@ -54,6 +55,18 @@ a {
   background: repeating-linear-gradient(0deg, rgba(255,255,255,.035), rgba(255,255,255,.035) 1px, transparent 1px, transparent 4px);
   mix-blend-mode: overlay;
   opacity: .35;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  background:
+    conic-gradient(from 180deg at 50% 50%, transparent, rgba(158, 228, 147, .08), transparent, rgba(246, 200, 95, .07), transparent);
+  animation: ambientSweep 22s linear infinite;
+  filter: blur(30px);
+  opacity: .8;
 }
 
 .topbar {
@@ -86,6 +99,7 @@ a {
   background: #111b14;
   color: var(--green);
   box-shadow: inset 0 0 18px rgba(158, 228, 147, .16);
+  animation: terminalBlink 2.8s steps(2, end) infinite;
 }
 
 .brand strong,
@@ -117,11 +131,13 @@ a {
   background: rgba(32, 38, 41, .8);
   color: var(--ink);
   cursor: pointer;
+  transition: border-color .18s ease, transform .18s ease, background .18s ease, box-shadow .18s ease;
 }
 
 .nav a:hover,
 .button:hover {
   border-color: var(--green);
+  transform: translateY(-1px);
 }
 
 main {
@@ -172,6 +188,7 @@ main {
   background: var(--green);
   color: #101113;
   font-weight: 800;
+  box-shadow: 0 0 18px rgba(158, 228, 147, .22);
 }
 
 .button.ghost {
@@ -193,10 +210,18 @@ main {
 .quiz-panel,
 .results-panel,
 .level-card,
-.history-item {
+.history-item,
+.ranking-shell {
   border: 1px solid rgba(158, 228, 147, .24);
   background: linear-gradient(180deg, rgba(32, 38, 41, .92), rgba(18, 21, 23, .96));
   box-shadow: var(--shadow);
+}
+
+.terminal-card,
+.setup-panel,
+.quiz-panel,
+.results-panel {
+  animation: panelEnter .45s ease both;
 }
 
 .terminal-card {
@@ -222,6 +247,12 @@ pre {
   color: var(--green);
   line-height: 1.8;
   font-size: clamp(.9rem, 1.4vw, 1.05rem);
+}
+
+pre code::after {
+  content: "_";
+  color: var(--amber);
+  animation: cursorBlink 1s steps(2, end) infinite;
 }
 
 .stats-band {
@@ -282,6 +313,13 @@ pre {
   display: flex;
   flex-direction: column;
   gap: .75rem;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.level-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(158, 228, 147, .65);
+  box-shadow: 0 18px 50px rgba(158, 228, 147, .1);
 }
 
 .level-card h3 {
@@ -427,6 +465,7 @@ a:focus-visible {
 .option.selected {
   border-color: var(--cyan);
   background: rgba(123, 223, 242, .12);
+  box-shadow: inset 0 0 18px rgba(123, 223, 242, .08);
 }
 
 .option.correct {
@@ -438,17 +477,20 @@ a:focus-visible {
 }
 
 .review-list,
-.history-list {
+.history-list,
+.ranking-list {
   display: grid;
   gap: .8rem;
   margin-top: 1rem;
 }
 
 .review-item,
-.history-item {
+.history-item,
+.ranking-row {
   border: 1px solid var(--line);
   padding: 1rem;
   background: rgba(12, 15, 16, .62);
+  animation: panelEnter .32s ease both;
 }
 
 .review-item.correct {
@@ -460,15 +502,155 @@ a:focus-visible {
 }
 
 .review-item h3,
-.history-item h3 {
+.history-item h3,
+.ranking-row h3 {
   margin: 0 0 .5rem;
 }
 
 .review-item p,
 .history-item p,
+.ranking-row p,
 .git-delivery {
   color: #d7d2bd;
   line-height: 1.55;
+}
+
+.ranking,
+.history {
+  padding: clamp(3rem, 7vw, 5rem) 0;
+}
+
+.ranking-shell {
+  padding: 1rem;
+}
+
+.ranking-toolbar,
+.history-filters {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.podium-card {
+  position: relative;
+  min-height: 190px;
+  overflow: hidden;
+  border: 1px solid rgba(158, 228, 147, .34);
+  background: linear-gradient(160deg, rgba(12, 15, 16, .9), rgba(32, 38, 41, .86));
+  padding: 1rem;
+  animation: floatIn .5s ease both;
+}
+
+.podium-card::before {
+  content: "";
+  position: absolute;
+  inset: auto -20% -40% -20%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(158, 228, 147, .18), transparent 65%);
+  animation: glowPulse 2.8s ease-in-out infinite;
+}
+
+.podium-card.rank-1 {
+  border-color: var(--amber);
+  transform: translateY(-10px);
+}
+
+.podium-card.rank-2 {
+  border-color: var(--cyan);
+}
+
+.podium-card.rank-3 {
+  border-color: rgba(246, 200, 95, .55);
+}
+
+.podium-card h3,
+.podium-card p,
+.podium-card strong,
+.podium-card small,
+.rank-badge {
+  position: relative;
+  z-index: 1;
+}
+
+.podium-card h3 {
+  margin: 2rem 0 .5rem;
+  color: var(--green);
+  font-size: 1.35rem;
+}
+
+.podium-card p,
+.podium-card small {
+  display: block;
+  color: #d7d2bd;
+}
+
+.podium-card strong {
+  display: block;
+  margin: .75rem 0 .35rem;
+  color: var(--amber);
+  font-size: 1.4rem;
+}
+
+.rank-badge,
+.rank-number {
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--green);
+  color: var(--green);
+  background: rgba(17, 27, 20, .92);
+}
+
+.rank-badge {
+  width: 46px;
+  height: 32px;
+}
+
+.ranking-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 90px 90px;
+  gap: 1rem;
+  align-items: center;
+}
+
+.rank-number {
+  width: 38px;
+  height: 38px;
+}
+
+.ranking-row strong {
+  color: var(--amber);
+  font-size: 1.2rem;
+}
+
+.history-filters {
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr);
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.history-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: flex-end;
+}
+
+.pulse-once {
+  animation: answerPulse .22s ease;
 }
 
 .git-delivery {
@@ -500,7 +682,10 @@ code {
   }
 
   .level-grid,
-  .stats-band {
+  .stats-band,
+  .podium,
+  .ranking-toolbar,
+  .history-filters {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -509,7 +694,8 @@ code {
   .topbar,
   .footer,
   .quiz-header,
-  .result-summary {
+  .result-summary,
+  .history-item {
     align-items: stretch;
     flex-direction: column;
   }
@@ -524,11 +710,70 @@ code {
   }
 
   .level-grid,
-  .stats-band {
+  .stats-band,
+  .podium,
+  .ranking-toolbar,
+  .history-filters,
+  .ranking-row {
     grid-template-columns: 1fr;
   }
 
   .hero h1 {
     font-size: 2.45rem;
+  }
+}
+
+@keyframes ambientSweep {
+  from { transform: rotate(0deg) scale(1); }
+  to { transform: rotate(360deg) scale(1.08); }
+}
+
+@keyframes terminalBlink {
+  50% { box-shadow: inset 0 0 22px rgba(158, 228, 147, .28), 0 0 14px rgba(158, 228, 147, .18); }
+}
+
+@keyframes cursorBlink {
+  50% { opacity: 0; }
+}
+
+@keyframes panelEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: .55; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-8px); }
+}
+
+@keyframes answerPulse {
+  50% { transform: scale(1.01); border-color: var(--amber); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
   }
 }
