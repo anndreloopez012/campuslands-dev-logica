@@ -1,6 +1,6 @@
 # Ejercicio 003 - Torneo de Esports
 
-**Camper:** Antonio Canux
+**Camper:** Marco Antonio Canux
 
 ## Analisis
 
