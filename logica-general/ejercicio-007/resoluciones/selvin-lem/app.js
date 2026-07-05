@@ -32,6 +32,7 @@ function detectarInconsistencias(items, prioridad, regla) {
   };
 }
 
+
 // pruebas
 console.log(detectarInconsistencias(["aprobado", "pendiente", "bloqueado"], "alta", "revisar bloqueados primero"));
 // caso normal: { inconsistencias: [], motivo: 'los datos son consistentes con las reglas del sistema.' }
