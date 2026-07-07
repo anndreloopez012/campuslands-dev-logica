@@ -12,7 +12,7 @@ pingpong
 
 Estas trabajando como estudiante de Campuslands en un reto de pingpong. El objetivo no es memorizar codigo, sino analizar una situacion, convertirla en reglas claras y construir una solucion ordenada.
 
-En este ejercicio debes resolver un caso de comparacion de opciones. La dificultad sube de forma gradual: aqui se espera combinar varias condiciones y revisar casos especiales.
+En este ejercicio debes resolver un caso de comparacion de opciones. La dificultad sube de forma gradual: aqui se espera combinar varias condiciones y r    evisar casos especiales.
 
 ## Objetivo
 
