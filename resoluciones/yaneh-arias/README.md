@@ -1,17 +1,16 @@
 
-# Ejercicio 008: Patrones de puntuación en ciencia ficción
+# Ejercicio 009: Módulos y divisibilidad en películas de miedo
 
 ## Pensamiento del problema
-El objetivo es analizar el rendimiento de un catálogo de películas comparando sus puntajes contra un umbral de calidad. El patrón resultante (Positivo o Crítico) permite tomar decisiones de curaduría de contenido.
+Utilizo el operador de módulo (`%`) para resolver problemas de repartición. Si el residuo de la división es 0, significa que el conjunto de películas puede dividirse equitativamente entre los grupos de espectadores.
 
 ## Reglas aplicadas
-1. **Filtrado:** Se utiliza `.filter()` para aislar los puntajes que cumplen con el umbral.
-2. **Cálculo:** Se determina la proporción de películas exitosas respecto al total.
-3. **Clasificación:** Si el éxito es mayor al 50%, la tendencia se marca como 'Positiva'.
+1. **Módulo:** Se calcula `totalPeliculas % grupos`.
+2. **Validación:** Si el resultado es 0, la divisibilidad es exacta.
 
 ## Cómo ejecutar
-Ejecuta en tu terminal: `node yaneh-arias.js`
+Ejecuta: `node yaneh-arias.js`
 
 ## Casos de prueba
-- **Normal:** `[8.5, 9.0, 6.5, 7.0, 9.5]` con umbral `8.0` -> 3 de 5 (60% Éxito).
-- **Caso Borde:** `[5.0]` con umbral `8.0` -> 0 de 1 (0% Éxito).
+- **Normal:** `20 películas / 4 grupos` -> Residuos 0 (Distribución perfecta).
+- **Caso Borde:** `21 películas / 4 grupos` -> Residuos 1 (Sobran películas).

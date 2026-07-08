@@ -1,29 +1,27 @@
 
 /**
- * Ejercicio 008: Patrones de puntuación en cine Sci-Fi
+ * Ejercicio 009: Módulos y divisibilidad en cine de terror
  * Autor: Yaneht Arias
  */
 
-function analizarPuntuaciones(scores, umbral) {
-    if (!scores || scores.length === 0) return "Lista vacía";
-
-    // 1. Filtrar películas que superan el umbral
-    const recomendadas = scores.filter(score => score >= umbral);
-
-    // 2. Calcular porcentaje de éxito
-    const porcentaje = (recomendadas.length / scores.length) * 100;
+function verificarDistribucion(totalPeliculas, grupos) {
+    // 1. Calcular residuo
+    const residuo = totalPeliculas % grupos;
 
     return {
-        totalAnalizadas: scores.length,
-        superanUmbral: recomendadas.length,
-        porcentajeExito: porcentaje.toFixed(2) + "%",
-        patron: porcentaje > 50 ? "Tendencia Positiva" : "Tendencia Crítica"
+        totalPeliculas,
+        grupos,
+        esDivisibleExacto: residuo === 0,
+        peliculasSobrantes: residuo,
+        mensaje: residuo === 0 
+            ? "Distribución perfecta: No quedan películas sueltas." 
+            : `Distribución desigual: Sobran ${residuo} películas.`
     };
 }
 
 // --- PRUEBAS ---
-// Caso Normal
-console.log("Caso Normal:", analizarPuntuaciones([8.5, 9.0, 6.5, 7.0, 9.5], 8.0));
+// Caso Normal: 20 películas en 4 grupos
+console.log("Caso Normal:", verificarDistribucion(20, 4));
 
-// Caso Borde: Lista con un solo elemento
-console.log("Caso Borde:", analizarPuntuaciones([5.0], 8.0));
+// Caso Borde: 21 películas en 4 grupos
+console.log("Caso Borde:", verificarDistribucion(21, 4));
