@@ -1,17 +1,13 @@
 
-# Ejercicio 014: Gestión de Puntajes
+# Ejercicio 015: Velocidad, Tiempo y Distancia en Dibujo Digital
 
 ## Pensamiento del problema
-El reto requiere clasificar jugadores basándose en su puntaje, manteniendo la integridad de los datos en caso de que dos jugadores obtengan el mismo resultado (empate técnico).
+Para digitalizar un trazo, calculo la distancia cubierta multiplicando la velocidad del cursor por el tiempo de ejecución. Esto permite determinar si el trazado alcanza a cubrir la longitud necesaria del lienzo.
 
 ## Reglas aplicadas
-1. **Ordenamiento:** Se utiliza `sort` para organizar los puntajes descendentemente.
-2. **Validación de Empate:** Se compara el puntaje actual con el anterior; si son iguales, se asigna el estado 'Empate técnico'.
-3. **Estructura:** Se devuelve un objeto mapeado con el puesto correspondiente.
-
-## Cómo ejecutar
-Ejecuta en tu terminal: `node yaneh-arias.js`
+1. **Fórmula:** Distancia = Velocidad * Tiempo.
+2. **Validación:** Si la distancia supera los 500 píxeles, se marca como 'Lienzo completo'.
 
 ## Casos de prueba
-- **Normal:** Jugadores con puntajes `90, 85, 90` -> Maneja el empate correctamente.
-- **Caso Borde:** Lista con un solo jugador -> Retorna puesto 1.
+- **Normal:** Velocidad 50px/s, Tiempo 10s -> Distancia 500 (Lienzo completo).
+- **Caso Borde:** Velocidad 50px/s, Tiempo 0s -> Distancia 0 (Trazado parcial).
