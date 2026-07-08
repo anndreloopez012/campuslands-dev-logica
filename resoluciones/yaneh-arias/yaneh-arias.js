@@ -1,30 +1,29 @@
+
 /**
- * Ejercicio 007: Secuencias numéricas en lista de reproducción
+ * Ejercicio 008: Patrones de puntuación en cine Sci-Fi
  * Autor: Yaneht Arias
  */
 
-function validarSecuencia(tempos) {
-    if (tempos.length < 2) return "Secuencia válida (pocos datos)";
+function analizarPuntuaciones(scores, umbral) {
+    if (!scores || scores.length === 0) return "Lista vacía";
 
-    // Verificar si es estrictamente ascendente
-    let esAscendente = true;
-    for (let i = 0; i < tempos.length - 1; i++) {
-        if (tempos[i] >= tempos[i + 1]) {
-            esAscendente = false;
-            break;
-        }
-    }
+    // 1. Filtrar películas que superan el umbral
+    const recomendadas = scores.filter(score => score >= umbral);
+
+    // 2. Calcular porcentaje de éxito
+    const porcentaje = (recomendadas.length / scores.length) * 100;
 
     return {
-        secuencia: tempos,
-        esAscendente,
-        mensaje: esAscendente ? "Flujo suave: Secuencia ascendente" : "Flujo mixto: Orden no lineal"
+        totalAnalizadas: scores.length,
+        superanUmbral: recomendadas.length,
+        porcentajeExito: porcentaje.toFixed(2) + "%",
+        patron: porcentaje > 50 ? "Tendencia Positiva" : "Tendencia Crítica"
     };
 }
 
 // --- PRUEBAS ---
-// Caso Normal: Secuencia ascendente
-console.log("Caso Normal:", validarSecuencia([60, 80, 100, 120]));
+// Caso Normal
+console.log("Caso Normal:", analizarPuntuaciones([8.5, 9.0, 6.5, 7.0, 9.5], 8.0));
 
-// Caso Borde: Secuencia decreciente/desordenada
-console.log("Caso Borde:", validarSecuencia([120, 60, 80]));
+// Caso Borde: Lista con un solo elemento
+console.log("Caso Borde:", analizarPuntuaciones([5.0], 8.0));

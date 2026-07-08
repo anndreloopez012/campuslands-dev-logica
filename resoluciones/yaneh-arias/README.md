@@ -1,16 +1,17 @@
 
-# Ejercicio 007: Secuencias numéricas en listas de reproducción
+# Ejercicio 008: Patrones de puntuación en ciencia ficción
 
 ## Pensamiento del problema
-Para gestionar una lista de reproducción, es vital identificar si la secuencia de tiempos (tempos) sigue un orden lógico. Esto permite clasificar el flujo de la música como 'suave' (ascendente) o 'mixto'.
+El objetivo es analizar el rendimiento de un catálogo de películas comparando sus puntajes contra un umbral de calidad. El patrón resultante (Positivo o Crítico) permite tomar decisiones de curaduría de contenido.
 
 ## Reglas aplicadas
-1. **Validación:** Se recorre el arreglo comparando cada elemento con su sucesor.
-2. **Lógica:** Si algún elemento es mayor o igual al siguiente, se rompe la condición de secuencia ascendente.
+1. **Filtrado:** Se utiliza `.filter()` para aislar los puntajes que cumplen con el umbral.
+2. **Cálculo:** Se determina la proporción de películas exitosas respecto al total.
+3. **Clasificación:** Si el éxito es mayor al 50%, la tendencia se marca como 'Positiva'.
 
 ## Cómo ejecutar
-Ejecuta: `node yaneh-arias.js`
+Ejecuta en tu terminal: `node yaneh-arias.js`
 
 ## Casos de prueba
-- **Normal:** `[60, 80, 100, 120]` -> Es ascendente: true.
-- **Caso Borde:** `[120, 60, 80]` -> Es ascendente: false.
+- **Normal:** `[8.5, 9.0, 6.5, 7.0, 9.5]` con umbral `8.0` -> 3 de 5 (60% Éxito).
+- **Caso Borde:** `[5.0]` con umbral `8.0` -> 0 de 1 (0% Éxito).
