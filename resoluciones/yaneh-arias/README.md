@@ -1,20 +1,17 @@
 
-# Ejercicio 002: Ranking de fútbol sala
+# Ejercicio 003: Promedios y Medianas en Esports
 
 ## Pensamiento del problema
-Para resolver este reto, identifiqué que el proceso principal es una acumulación de datos (suma de integrantes de los equipos) seguido de una operación aritmética simple (aplicar bono/penalización) y una clasificación basada en rangos.
+Para este ejercicio, el reto fue diferenciar entre el promedio (tendencia central aritmética) y la mediana (valor central posicional), lo cual es crucial para evaluar el desempeño de jugadores en esports.
 
 ## Reglas aplicadas
-1. **Suma:** Se utilizó el método `.reduce()` para sumar el arreglo de participantes.
-2. **Cálculo:** Se aplica la fórmula: $Resultado = \sum(participantes) + bono - penalizacion$.
-3. **Clasificación:** - > 25: Competitivo
-   - 15 a 25: Estándar
-   - < 15: En desarrollo
+1. **Promedio:** Sumatoria de todos los puntajes dividida por la cantidad de elementos.
+2. **Mediana:** Ordenamiento de los datos de menor a mayor para encontrar el punto central. Si la cantidad de elementos es par, se promedian los dos valores centrales.
+3. **Clasificación:** Si el promedio supera 20, el equipo es 'élite'.
 
 ## Cómo ejecutar
-1. Asegúrate de tener instalado [Node.js](https://nodejs.org/).
-2. En la terminal, dentro de la carpeta, ejecuta: `node yaneh-arias.js`
+Ejecuta el archivo en tu terminal con: `node yaneh-arias.js`
 
 ## Casos de prueba
-- **Caso Normal:** `([12, 18, 25, 30], 8, 3)` -> Puntaje: 27 (Competitivo).
-- **Caso Borde:** `([1, 1], 0, 1)` -> Puntaje: 1 (En desarrollo).
+- **Normal:** `[12, 18, 25, 30]` -> Promedio: 18.75, Mediana: 21.5.
+- **Caso Borde:** `[10]` -> Promedio: 10, Mediana: 10.
