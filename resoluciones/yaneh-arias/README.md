@@ -1,17 +1,16 @@
 
-# Ejercicio 010: Redondeo y precisión en viajes
+# Ejercicio 011: Conteo combinatorio en Kickboxing
 
 ## Pensamiento del problema
-En el sector turismo, la precisión monetaria es crítica. He implementado lógica para separar el valor preciso para transacciones (2 decimales) del valor entero útil para reportes ejecutivos.
+Para organizar un torneo de kickboxing, es necesario saber cuántos combates únicos ocurrirán. Utilizo la fórmula combinatoria de $n$ elementos tomados de 2 en 2 para asegurar que cada luchador se enfrente a todos los demás una sola vez.
 
 ## Reglas aplicadas
-1. **Precisión:** Uso de `toFixed(2)` para limitar la salida financiera.
-2. **Redondeo:** Uso de `Math.round()` para obtener el valor entero más cercano.
-3. **Validación:** Se previene la división por cero si no hay turistas.
+1. **Fórmula:** $Enfrentamientos = \frac{n(n-1)}{2}$
+2. **Validación:** Si hay menos de 2 luchadores, no hay combates posibles.
 
 ## Cómo ejecutar
 Ejecuta: `node yaneh-arias.js`
 
 ## Casos de prueba
-- **Normal:** `1500.75 / 3` -> Preciso: 500.25, Redondeado: 500.
-- **Caso Borde:** `10 / 1` -> Preciso: 10, Redondeado: 10.
+- **Normal:** `4 luchadores` -> 6 enfrentamientos posibles.
+- **Caso Borde:** `2 luchadores` -> 1 enfrentamiento posible.

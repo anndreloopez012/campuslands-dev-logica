@@ -1,27 +1,25 @@
 
 /**
- * Ejercicio 010: Redondeo y precisión en Viajes y Turismo
+ * Ejercicio 011: Conteo combinatorio en Kickboxing
  * Autor: Yaneht Arias
  */
 
-function calcularCostoPromedio(totalGastos, numeroTuristas) {
-    if (numeroTuristas <= 0) return "El número de turistas debe ser mayor a 0";
+function calcularEnfrentamientos(luchadores) {
+    if (luchadores < 2) return 0;
 
-    const promedio = totalGastos / numeroTuristas;
+    // Fórmula combinatoria: n * (n - 1) / 2
+    const combinaciones = (luchadores * (luchadores - 1)) / 2;
 
     return {
-        totalGastos,
-        numeroTuristas,
-        // Redondeo a 2 decimales para moneda
-        costoPorPersona: parseFloat(promedio.toFixed(2)),
-        // Redondeo al entero más cercano para reporte
-        costoRedondeado: Math.round(promedio)
+        totalLuchadores: luchadores,
+        enfrentamientosPosibles: combinaciones,
+        mensaje: `Con ${luchadores} luchadores, hay ${combinaciones} enfrentamientos posibles.`
     };
 }
 
 // --- PRUEBAS ---
-// Caso Normal: Gastos con varios decimales
-console.log("Caso Normal:", calcularCostoPromedio(1500.75, 3));
+// Caso Normal: 4 luchadores
+console.log("Caso Normal:", calcularEnfrentamientos(4));
 
-// Caso Borde: Gastos mínimos
-console.log("Caso Borde:", calcularCostoPromedio(10, 1));
+// Caso Borde: 2 luchadores (único enfrentamiento)
+console.log("Caso Borde:", calcularEnfrentamientos(2));
