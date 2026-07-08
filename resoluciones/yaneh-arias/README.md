@@ -1,16 +1,16 @@
 
-# Ejercicio 011: Conteo combinatorio en Kickboxing
+# Ejercicio 012: Probabilidad básica en Ping Pong
 
 ## Pensamiento del problema
-Para organizar un torneo de kickboxing, es necesario saber cuántos combates únicos ocurrirán. Utilizo la fórmula combinatoria de $n$ elementos tomados de 2 en 2 para asegurar que cada luchador se enfrente a todos los demás una sola vez.
+Para determinar la efectividad de un jugador, calculo la relación entre los aciertos y el total de intentos. Esto nos permite clasificar el rendimiento del jugador bajo un criterio probabilístico.
 
 ## Reglas aplicadas
-1. **Fórmula:** $Enfrentamientos = \frac{n(n-1)}{2}$
-2. **Validación:** Si hay menos de 2 luchadores, no hay combates posibles.
+1. **Fórmula:** $P = \frac{saquesExitosos}{totalSaques}$
+2. **Clasificación:** Si la probabilidad supera el 70% (0.7), el nivel es 'élite'.
 
 ## Cómo ejecutar
 Ejecuta: `node yaneh-arias.js`
 
 ## Casos de prueba
-- **Normal:** `4 luchadores` -> 6 enfrentamientos posibles.
-- **Caso Borde:** `2 luchadores` -> 1 enfrentamiento posible.
+- **Normal:** `8 exitosos de 10` -> 80% (Élite).
+- **Caso Borde:** `0 exitosos de 10` -> 0% (Regular).
