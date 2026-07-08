@@ -1,24 +1,39 @@
 
 /**
- * Ejercicio 013: Coordenadas y distancia en Paracaidismo
+ * Ejercicio 014: Gestión de Puntajes con Validación de Empates
  * Autor: Yaneht Arias
  */
 
-function calcularDistanciaAterrizaje(x1, y1, x2, y2) {
-    // Fórmula de distancia euclidiana
-    const distancia = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+function procesarResultados(jugadores) {
+    if (!jugadores || jugadores.length === 0) return "Entrada vacía";
 
-    return {
-        puntoOrigen: {x: x1, y: y1},
-        puntoDestino: {x: x2, y: y2},
-        distancia: distancia.toFixed(2),
-        estado: distancia < 10 ? "aterrizaje preciso" : "fuera de zona"
-    };
+    // Regla 1: Ordenar de mayor a menor
+    const ordenados = [...jugadores].sort((a, b) => b.puntaje - a.puntaje);
+
+    // Regla 2: Determinar ranking y manejar empate
+    const ranking = ordenados.map((j, index) => {
+        let puesto = index + 1;
+        
+        // Si el puntaje es igual al anterior, es un empate técnico
+        if (index > 0 && j.puntaje === ordenados[index - 1].puntaje) {
+            puesto = "Empate técnico";
+        }
+        
+        return { nombre: j.nombre, puntaje: j.puntaje, puesto };
+    });
+
+    return ranking;
 }
 
 // --- PRUEBAS ---
 // Caso Normal
-console.log("Caso Normal:", calcularDistanciaAterrizaje(0, 0, 3, 4));
+const lista = [
+    { nombre: "Jugador A", puntaje: 90 },
+    { nombre: "Jugador B", puntaje: 85 },
+    { nombre: "Jugador C", puntaje: 90 }
+];
 
-// Caso Borde: Mismo punto de origen y destino
-console.log("Caso Borde:", calcularDistanciaAterrizaje(5, 5, 5, 5));
+console.log("Caso Normal (con empate):", procesarResultados(lista));
+
+// Caso Borde: Un solo jugador
+console.log("Caso Borde:", procesarResultados([{ nombre: "Solitario", puntaje: 100 }]));
