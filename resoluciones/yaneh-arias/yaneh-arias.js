@@ -1,27 +1,27 @@
 
 /**
- * Ejercicio 009: Módulos y divisibilidad en cine de terror
+ * Ejercicio 010: Redondeo y precisión en Viajes y Turismo
  * Autor: Yaneht Arias
  */
 
-function verificarDistribucion(totalPeliculas, grupos) {
-    // 1. Calcular residuo
-    const residuo = totalPeliculas % grupos;
+function calcularCostoPromedio(totalGastos, numeroTuristas) {
+    if (numeroTuristas <= 0) return "El número de turistas debe ser mayor a 0";
+
+    const promedio = totalGastos / numeroTuristas;
 
     return {
-        totalPeliculas,
-        grupos,
-        esDivisibleExacto: residuo === 0,
-        peliculasSobrantes: residuo,
-        mensaje: residuo === 0 
-            ? "Distribución perfecta: No quedan películas sueltas." 
-            : `Distribución desigual: Sobran ${residuo} películas.`
+        totalGastos,
+        numeroTuristas,
+        // Redondeo a 2 decimales para moneda
+        costoPorPersona: parseFloat(promedio.toFixed(2)),
+        // Redondeo al entero más cercano para reporte
+        costoRedondeado: Math.round(promedio)
     };
 }
 
 // --- PRUEBAS ---
-// Caso Normal: 20 películas en 4 grupos
-console.log("Caso Normal:", verificarDistribucion(20, 4));
+// Caso Normal: Gastos con varios decimales
+console.log("Caso Normal:", calcularCostoPromedio(1500.75, 3));
 
-// Caso Borde: 21 películas en 4 grupos
-console.log("Caso Borde:", verificarDistribucion(21, 4));
+// Caso Borde: Gastos mínimos
+console.log("Caso Borde:", calcularCostoPromedio(10, 1));
