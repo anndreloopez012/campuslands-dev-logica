@@ -1,17 +1,14 @@
 
-# Ejercicio 003: Promedios y Medianas en Esports
+# Ejercicio 004: Inventario de motos
 
 ## Pensamiento del problema
-Para este ejercicio, el reto fue diferenciar entre el promedio (tendencia central aritmética) y la mediana (valor central posicional), lo cual es crucial para evaluar el desempeño de jugadores en esports.
+El objetivo es analizar la dispersión de los datos en el inventario. Utilizo el valor máximo y mínimo para obtener el rango, lo que me indica si el inventario está centralizado o disperso.
 
 ## Reglas aplicadas
-1. **Promedio:** Sumatoria de todos los puntajes dividida por la cantidad de elementos.
-2. **Mediana:** Ordenamiento de los datos de menor a mayor para encontrar el punto central. Si la cantidad de elementos es par, se promedian los dos valores centrales.
-3. **Clasificación:** Si el promedio supera 20, el equipo es 'élite'.
-
-## Cómo ejecutar
-Ejecuta el archivo en tu terminal con: `node yaneh-arias.js`
+1. **Máximo/Mínimo:** Uso de las funciones nativas de JS para encontrar extremos.
+2. **Rango:** Diferencia matemática entre el valor máximo y el mínimo.
+3. **Clasificación:** Si el rango supera 50, se etiqueta como 'crítico'.
 
 ## Casos de prueba
-- **Normal:** `[12, 18, 25, 30]` -> Promedio: 18.75, Mediana: 21.5.
-- **Caso Borde:** `[10]` -> Promedio: 10, Mediana: 10.
+- **Normal:** `[100, 150, 120, 200]` -> Rango: 100 (Crítico).
+- **Caso Borde:** `[50, 50]` -> Rango: 0 (Estable).
