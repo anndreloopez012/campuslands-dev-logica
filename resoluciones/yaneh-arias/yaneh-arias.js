@@ -1,24 +1,29 @@
 
 /**
- * Ejercicio 004: Inventario de motos
+ * Ejercicio 005: Gestión de Taller Mecánico (Mínimos y Límites)
  * Autor: Yaneht Arias
  */
 
-function procesarInventario(stock) {
-    if (!stock || stock.length === 0) return "Stock vacío";
+function evaluarStockTaller(piezas, limiteMinimo) {
+    // 1. Identificar el valor mínimo actual
+    const stockMinimo = Math.min(...piezas);
 
-    const maximo = Math.max(...stock);
-    const minimo = Math.min(...stock);
-    const rango = maximo - minimo;
+    // 2. Aplicar reglas de límite
+    const requierePedido = stockMinimo < limiteMinimo;
 
     return {
-        maximo,
-        minimo,
-        rango,
-        estado: rango > 50 ? "crítico" : "estable"
+        stockMinimo,
+        limiteMinimo,
+        requierePedido,
+        mensaje: requierePedido 
+            ? "Alerta: El stock está por debajo del límite, realizar pedido." 
+            : "Stock saludable: No requiere pedido."
     };
 }
 
 // --- PRUEBAS ---
-console.log("Caso Normal:", procesarInventario([100, 150, 120, 200]));
-console.log("Caso Borde:", procesarInventario([50, 50]));
+// Caso Normal: Stock variado con un valor bajo
+console.log("Caso Normal:", evaluarStockTaller([20, 5, 40, 15], 10));
+
+// Caso Borde: Stock exactamente en el límite
+console.log("Caso Borde:", evaluarStockTaller([10, 20, 30], 10));

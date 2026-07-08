@@ -1,14 +1,17 @@
 
-# Ejercicio 004: Inventario de motos
+# Ejercicio 005: Taller Mecánico (Mínimos y Límites)
 
 ## Pensamiento del problema
-El objetivo es analizar la dispersión de los datos en el inventario. Utilizo el valor máximo y mínimo para obtener el rango, lo que me indica si el inventario está centralizado o disperso.
+El objetivo es controlar el inventario crítico. He definido una función que compara el valor mínimo de piezas disponibles contra un límite de seguridad preestablecido, permitiendo automatizar la decisión de compra.
 
 ## Reglas aplicadas
-1. **Máximo/Mínimo:** Uso de las funciones nativas de JS para encontrar extremos.
-2. **Rango:** Diferencia matemática entre el valor máximo y el mínimo.
-3. **Clasificación:** Si el rango supera 50, se etiqueta como 'crítico'.
+1. **Identificación:** Se extrae el valor mínimo del array de piezas usando `Math.min`.
+2. **Validación:** Se compara el mínimo contra el `limiteMinimo`.
+3. **Acción:** Si el stock mínimo es estrictamente menor al límite, se activa la alerta de pedido.
+
+## Cómo ejecutar
+Ejecuta el archivo en tu terminal con: `node yaneh-arias.js`
 
 ## Casos de prueba
-- **Normal:** `[100, 150, 120, 200]` -> Rango: 100 (Crítico).
-- **Caso Borde:** `[50, 50]` -> Rango: 0 (Estable).
+- **Normal:** `([20, 5, 40, 15], 10)` -> Mínimo: 5, requierePedido: true.
+- **Caso Borde:** `([10, 20, 30], 10)` -> Mínimo: 10, requierePedido: false.
