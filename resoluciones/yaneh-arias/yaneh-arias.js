@@ -1,26 +1,24 @@
 
 /**
- * Ejercicio 012: Probabilidad básica en Ping Pong
+ * Ejercicio 013: Coordenadas y distancia en Paracaidismo
  * Autor: Yaneht Arias
  */
 
-function calcularProbabilidadVictoria(saquesExitosos, totalSaques) {
-    if (totalSaques === 0) return "El total de saques debe ser mayor a 0";
-    
-    // Probabilidad: casos favorables / casos totales
-    const probabilidad = saquesExitosos / totalSaques;
+function calcularDistanciaAterrizaje(x1, y1, x2, y2) {
+    // Fórmula de distancia euclidiana
+    const distancia = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 
     return {
-        totalSaques,
-        saquesExitosos,
-        probabilidad: (probabilidad * 100).toFixed(2) + "%",
-        nivelEfectividad: probabilidad > 0.7 ? "élite" : "regular"
+        puntoOrigen: {x: x1, y: y1},
+        puntoDestino: {x: x2, y: y2},
+        distancia: distancia.toFixed(2),
+        estado: distancia < 10 ? "aterrizaje preciso" : "fuera de zona"
     };
 }
 
 // --- PRUEBAS ---
-// Caso Normal: 8 saques exitosos de 10
-console.log("Caso Normal:", calcularProbabilidadVictoria(8, 10));
+// Caso Normal
+console.log("Caso Normal:", calcularDistanciaAterrizaje(0, 0, 3, 4));
 
-// Caso Borde: 0 saques exitosos
-console.log("Caso Borde:", calcularProbabilidadVictoria(0, 10));
+// Caso Borde: Mismo punto de origen y destino
+console.log("Caso Borde:", calcularDistanciaAterrizaje(5, 5, 5, 5));
