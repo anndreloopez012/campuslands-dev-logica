@@ -1,27 +1,38 @@
 
 """
-Ejercicio 002: Cálculo de Efectividad de Equipo
+Ejercicio 002: Lógica de Ranking de Equipos
 Autor: Yaneh Arias
+Fecha: 08/07/2026
 """
 
-def calcular_efectividad(partidos_ganados, partidos_perdidos):
-    total_partidos = partidos_ganados + partidos_perdidos
+def clasificar_equipo(ganados, perdidos):
+    """
+    Calcula el porcentaje de efectividad y clasifica el equipo.
+    """
+    total = ganados + perdidos
     
-    if total_partidos == 0:
-        return 0.0, "Sin registros"
+    if total == 0:
+        return 0.0, "Sin partidos jugados"
     
-    porcentaje = (partidos_ganados / total_partidos) * 100
+    efectividad = (ganados / total) * 100
     
-    if porcentaje >= 50:
-        estado = "equipo_elite"
+    if efectividad >= 50:
+        categoria = "equipo_elite"
     else:
-        estado = "equipo_formacion"
+        categoria = "equipo_formacion"
         
-    return round(porcentaje, 2), estado
+    return round(efectividad, 2), categoria
 
-# Prueba del ejercicio
+# Lógica principal del programa
 if __name__ == "__main__":
-    ganados = 15
-    perdidos = 10
-    efectividad, categoria = calcular_efectividad(ganados, perdidos)
-    print(f"Efectividad: {efectividad}% - Categoría: {categoria}")
+    try:
+        g = int(input("Ingrese partidos ganados: "))
+        p = int(input("Ingrese partidos perdidos: "))
+        
+        efectividad, categoria = clasificar_equipo(g, p)
+        
+        print(f"\n--- Resultado ---")
+        print(f"Efectividad: {efectividad}%")
+        print(f"Clasificación: {categoria}")
+    except ValueError:
+        print("Por favor, ingrese solo números enteros.")

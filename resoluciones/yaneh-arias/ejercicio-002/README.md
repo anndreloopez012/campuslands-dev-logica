@@ -1,20 +1,19 @@
 
+
 # Ejercicio 002: Ranking de fútbol sala
 
-## Pensamiento del problema
-Para resolver este reto, identifiqué que el proceso principal es una acumulación de datos (suma de integrantes de los equipos) seguido de una operación aritmética simple (aplicar bono/penalización) y una clasificación basada en rangos.
+## Descripción
+Programa desarrollado para calcular la efectividad de un equipo de fútbol sala. Basado en el número de partidos ganados y perdidos, el sistema determina si el equipo pertenece a la categoría "equipo_elite" o "equipo_formacion".
 
-## Reglas aplicadas
-1. **Suma:** Se utilizó el método `.reduce()` para sumar el arreglo de participantes.
-2. **Cálculo:** Se aplica la fórmula: $Resultado = \sum(participantes) + bono - penalizacion$.
-3. **Clasificación:** - > 25: Competitivo
-   - 15 a 25: Estándar
-   - < 15: En desarrollo
+## Especificaciones Técnicas
+- **Lenguaje:** Python 3.x
+- **Lógica de cálculo:** - $Total = Ganados + Perdidos$
+  - $Efectividad = (Ganados / Total) * 100$
 
 ## Cómo ejecutar
-1. Asegúrate de tener instalado [Node.js](https://nodejs.org/).
-2. En la terminal, dentro de la carpeta, ejecuta: `node yaneh-arias.js`
+1. Asegúrate de tener instalado Python.
+2. Abre tu terminal en la carpeta del ejercicio.
+3. Ejecuta el comando: `python yaneh-arias.py`
 
-## Casos de prueba
-- **Caso Normal:** `([12, 18, 25, 30], 8, 3)` -> Puntaje: 27 (Competitivo).
-- **Caso Borde:** `([1, 1], 0, 1)` -> Puntaje: 1 (En desarrollo).
+## Autor
+Yaneh 
