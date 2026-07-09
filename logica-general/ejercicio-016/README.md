@@ -5,7 +5,6 @@
 Basico guiado
 
 ## Tematica usada
-
 animacion 3D
 
 ## Contexto del problema
