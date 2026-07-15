@@ -1,24 +1,20 @@
 
-# Reto: Filtros por condiciones - Inventario de Motos
+# Resolución: Torneo de Esports
 
-## Descripción del Problema
-El objetivo de este reto es gestionar un inventario de motos aplicando filtros lógicos basados en el estado, el kilometraje y el presupuesto. La prioridad principal es identificar riesgos (motos bloqueadas) antes de procesar cualquier opción de compra para el usuario.
+## Pensamiento del problema
+Para resolver este reto, identifiqué que el problema es una búsqueda de valor máximo condicional. Utilicé `Array.prototype.reduce` porque permite comparar un elemento con el "acumulado" (el mejor hasta el momento), facilitando la lógica de desempate.
 
-## Análisis y Lógica Aplicada
-Para resolver este ejercicio, seguí los siguientes pasos:
-1. **Identificación de Entradas:** Un arreglo de objetos con atributos `id`, `marca`, `estado`, `precio` y `km`.
-2. **Definición de Reglas:**
-   - **Prioridad Crítica:** Las motos con estado "bloqueado" se extraen primero, independientemente de otros factores, para su revisión.
-   - **Filtro de Selección:** Para las motos disponibles, apliqué una validación doble: deben tener menos de 500 km y estar dentro del rango de `presupuestoMax` proporcionado.
-3. **Manejo de Casos Especiales:** Se incluyó una validación para inventarios vacíos o cuando no existen coincidencias tras aplicar los filtros.
+## Reglas aplicadas
+1. **Prioridad primaria:** Puntos.
+2. **Prioridad secundaria:** Partidas ganadas (solo si los puntos son iguales).
+3. **Validación:** Se verifica que el arreglo no esté vacío.
 
-## Reglas de Negocio
-- Ninguna moto bloqueada debe aparecer como "disponible".
-- Si no se cumplen las condiciones de presupuesto o kilometraje, la lista de opciones disponibles retornará vacía, pero se mantendrá la coherencia en la estructura de datos.
-
-## Cómo Revisar la Solución
+## Cómo ejecutar
 1. Asegúrate de tener instalado [Node.js](https://nodejs.org/).
-2. Ubícate en la carpeta del ejercicio.
-3. Ejecuta el archivo en tu terminal:
-   ```bash
-   node nombre-apellido.js
+2. Abre la terminal en la carpeta `resoluciones/nombre-apellido/`.
+3. Ejecuta: `node nombre-apellido.js`.
+
+## Casos probados
+* **Caso normal:** Comparación directa de puntos donde un equipo supera al otro claramente.
+* **Caso borde:** Empate en puntos donde la decisión recae en el número de partidas ganadas.
+Consejos para tu entrega:

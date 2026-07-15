@@ -1,26 +1,43 @@
 
-// Inventario de motos
-const inventario = [
-    { id: 1, marca: "Yamaha", estado: "disponible", precio: 5000, km: 100 },
-    { id: 2, marca: "Honda", estado: "bloqueado", precio: 3000, km: 2000 },
-    { id: 3, marca: "Suzuki", estado: "pendiente", precio: 4500, km: 200 },
-    { id: 4, marca: "Kawasaki", estado: "disponible", precio: 8000, km: 600 }
-];
+/**
+ * Resolucion: gestion-torneo.js
+ * Objetivo: Determinar el equipo clasificado basado en puntos y victorias.
+ */
 
-function filtrarInventario(lista, presupuestoMax) {
-    // Regla: Priorizar bloqueados, luego filtrar por precio y km
-    const bloqueados = lista.filter(m => m.estado === "bloqueado");
-    const disponibles = lista.filter(m => m.estado !== "bloqueado" && m.precio < presupuestoMax && m.km < 500);
+function determinarClasificado(equipos) {
+    if (!equipos || equipos.length === 0) {
+        return "Error: No hay equipos para evaluar.";
+    }
+
+    // Usamos el método reduce para encontrar el mejor equipo según las reglas
+    const ganador = equipos.reduce((mejor, actual) => {
+        if (actual.puntos > mejor.puntos) {
+            return actual;
+        } else if (actual.puntos === mejor.puntos) {
+            return actual.partidasGanadas > mejor.partidasGanadas ? actual : mejor;
+        }
+        return mejor;
+    });
 
     return {
-        prioridad: bloqueados,
-        opciones: disponibles
+        accion: `Clasificado: ${ganador.nombre}`,
+        motivo: `Puntos: ${ganador.puntos}, Victorias: ${ganador.partidasGanadas}. Cumple criterios de desempate.`
     };
 }
 
-// Pruebas
-console.log("--- Caso Normal ---");
-console.log(filtrarInventario(inventario, 6000));
+// --- Casos de Prueba ---
 
-console.log("\n--- Caso Borde (Presupuesto muy bajo) ---");
-console.log(filtrarInventario(inventario, 1000));
+// Caso 1: Normal
+const listaNormal = [
+    { nombre: "Alpha", puntos: 10, partidasGanadas: 3 },
+    { nombre: "Beta", puntos: 15, partidasGanadas: 5 }
+];
+
+// Caso 2: Borde (Empate en puntos, desempate por partidas)
+const listaEmpate = [
+    { nombre: "Omega", puntos: 20, partidasGanadas: 4 },
+    { nombre: "Sigma", puntos: 20, partidasGanadas: 6 }
+];
+
+console.log("Resultado Caso Normal:", determinarClasificado(listaNormal));
+console.log("Resultado Caso Borde:", determinarClasificado(listaEmpate));
