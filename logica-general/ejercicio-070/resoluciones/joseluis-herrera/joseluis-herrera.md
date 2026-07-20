@@ -1,0 +1,4 @@
+# Ejercicio 70
+
+# Explicación
+Este programa implementa una lógica de filtrado basada en el cumplimiento de requisitos operacionales (Business Rules). Al organizar los itinerarios como una colección de objetos, podemos aplicar una estructura de control condicional compleja que evalúa múltiples variables simultáneamente. El objetivo es procesar la información de manera ordenada, asegurando que solo los registros que cumplen con todos los criterios de negocio definidos pasen a la fase de confirmación. Este tipo de validación "paso a paso" permite identificar errores de entrada de datos (como campos vacíos o valores fuera de rango) antes de que el proceso de gestión de viajes avance, minimizando así errores administrativos y garantizando que cada reserva sea factible.

@@ -1,0 +1,4 @@
+# Ejercicio 69 
+
+# Explicación
+Este programa modela una máquina de estados finitos aplicada a la seguridad de entornos controlados. Al estructurar cada escenario como un objeto con propiedades mutables, permitimos que el sistema responda dinámicamente a los cambios en las métricas de entrada (nivel de actividad). El uso de una estructura condicional if-else if-else actúa como el motor de transición de estados: dependiendo de la magnitud de la actividad, el sistema recalcula y asigna el nivel de riesgo correspondiente. Esta lógica ordenada es esencial para cualquier aplicación que requiera una respuesta automatizada ante eventos cambiantes, garantizando que el estado del sistema refleje siempre la realidad observada por los sensores.

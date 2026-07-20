@@ -1,0 +1,4 @@
+# Ejercicio 70
+
+# Explicación
+Este programa gestiona la precisión financiera en transacciones internacionales mediante el uso de operadores matemáticos y funciones de redondeo. Al organizar el proceso en etapas claras —conversión, aplicación de impuestos y normalización del valor final—, eliminamos la ambigüedad que generan los decimales excesivos en las transacciones comerciales. El uso de Math.round() es la regla clave aquí: permite estandarizar el costo final para que sea comercialmente viable, evitando centavos fraccionarios que complicarían los procesos de facturación. Este flujo es un componente esencial en cualquier plataforma de reservas turísticas, donde la transparencia y la facilidad de pago son factores críticos para la confianza del usuario.

@@ -1,0 +1,4 @@
+# Ejercicio 67
+
+# Explicación
+Este programa automatiza la validación de registros dentro de un entorno de gestión de archivos multimedia mediante JavaScript. Al emplear una estructura de objetos dentro de un arreglo, organizamos los atributos de cada pista (nombre y duración) de manera legible. El uso del método forEach permite recorrer la colección completa de forma declarativa, mientras que la estructura condicional evalúa cada elemento bajo reglas de negocio estrictas. Este flujo de trabajo garantiza que cualquier pista que no cumpla con los estándares mínimos de metadata o tiempo sea identificada de inmediato, asegurando la consistencia en la base de datos de la plataforma musical.

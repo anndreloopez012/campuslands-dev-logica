@@ -1,0 +1,4 @@
+# Ejercicio 68
+
+# Explicación
+Este programa gestiona un flujo de trabajo secuencial para la publicación de contenido digital. Al utilizar una estructura de control con continue, implementamos una lógica de "guardias" o filtros donde cada etapa actúa como un punto de control obligatorio. Si el objeto de datos (la película) no cumple con los requisitos técnicos de formato o los criterios de audiencia, el proceso se interrumpe prematuramente para evitar errores en la base de datos final. Este enfoque estructurado es fundamental en ingeniería de software para asegurar que solo los productos que cumplen con todas las especificaciones operativas y de calidad avancen hacia la fase de publicación, manteniendo la integridad del sistema.

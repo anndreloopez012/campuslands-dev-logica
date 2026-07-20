@@ -1,0 +1,4 @@
+# Ejercicio 66
+
+# Explicación
+Este programa gestiona un catálogo técnico de vehículos de alta gama mediante estructuras de datos lineales. Al implementar una lógica de búsqueda secuencial, el sistema examina cada entrada individualmente para verificar su coincidencia con un criterio de fabricante predefinido. Esta organización de la información permite filtrar inventarios extensos de manera estructurada, facilitando la extracción de datos específicos necesarios para la gestión logística o la configuración de flotas de exhibición, asegurando que la identificación de modelos sea precisa y eficiente.

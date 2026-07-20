@@ -1,0 +1,4 @@
+# Ejercicio 69
+
+# Explicación
+Este programa aplica operaciones aritméticas modulares para gestionar la partición de un conjunto de datos en bloques de tamaño fijo. Al utilizar el operador módulo (%), determinamos matemáticamente el residuo de la división, lo cual es fundamental para identificar cuántos elementos quedan fuera de una agrupación estándar. Este método de organización es una base técnica sólida para sistemas de almacenamiento de archivos o paginación de listas, donde se requiere distribuir una cantidad arbitraria de elementos en contenedores de capacidad limitada, garantizando que todos los registros sean contabilizados y clasificados correctamente.

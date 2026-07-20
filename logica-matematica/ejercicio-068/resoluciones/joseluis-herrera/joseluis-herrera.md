@@ -1,0 +1,4 @@
+# Ejercicio 68
+
+# Explicación
+Este programa implementa un motor de clasificación de activos audiovisuales mediante la evaluación de métricas de desempeño. Al organizar las películas como una colección de objetos, encapsulamos los datos relevantes (título y calificación) para procesarlos de manera uniforme. El uso de una estructura condicional encadenada (if-else if-else) nos permite establecer reglas de negocio claras para categorizar el valor de cada obra según sus puntuaciones. Esta metodología de análisis permite a los administradores de catálogos identificar rápidamente qué títulos destacan por su calidad y cuáles requieren una revisión de audiencia, optimizando la toma de decisiones sobre la curaduría del contenido.

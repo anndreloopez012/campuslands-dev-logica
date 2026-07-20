@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Logica general 003 - toma de decisiones
 // Estudiante: stefani-sanchez
 
@@ -71,3 +72,49 @@ let prueba2 = [
 
 console.log("\nCaso borde:");
 console.log(decidirAccion(prueba2, "baja"));
+=======
+// Ejercicio 003 - Toma de decisiones
+// Torneo de esports
+
+function decidirAccion(equipo) {
+
+  if (
+    !equipo ||
+    typeof equipo.nombre !== "string" ||
+    typeof equipo.puntos !== "number" ||
+    equipo.puntos < 0
+  ) {
+    return "Error: Datos inválidos.";
+  }
+
+  let accion = "";
+
+  if (equipo.puntos >= 20) {
+    accion = "Clasifica directamente a la siguiente ronda.";
+  } else if (equipo.puntos >= 10) {
+    accion = "Debe jugar una ronda de repechaje.";
+  } else {
+    accion = "Queda eliminado del torneo.";
+  }
+
+  return `${equipo.nombre}: ${accion}`;
+}
+
+// Prueba normal
+console.log("Prueba 1");
+console.log(
+  decidirAccion({
+    nombre: "Dragons",
+    puntos: 22
+  })
+);
+
+// Caso borde
+console.log("\nPrueba 2");
+console.log(
+  decidirAccion({
+    nombre: "Phoenix",
+    puntos: 0
+  })
+);
+>>>>>>> 0f99bf7 (feat: resolver ejercicio 003)
