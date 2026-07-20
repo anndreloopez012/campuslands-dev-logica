@@ -6,7 +6,7 @@ Intermedio inicial
 
 ## Tematica usada
 
-autos hiperdeportivos
+autos hiperdeportivos 
 
 ## Contexto del problema
 
