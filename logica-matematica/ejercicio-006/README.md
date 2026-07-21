@@ -124,4 +124,4 @@ Tu ejercicio esta bien si:
 - La solucion produce el resultado esperado para el ejemplo.
 - Agregaste al menos un caso de prueba propio.
 - Puedes explicar por que tu respuesta es correcta.
-- No modificaste archivos de otros estudiantes ni archivos base.
+- No modificaste archivos de otros estudiantes ni archivos 
