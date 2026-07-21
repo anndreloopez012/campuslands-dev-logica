@@ -1,0 +1,16 @@
+
+# Ejercicio 042: Porcentajes y Proporciones (Ranking de Fútbol Sala)
+
+## 🚀 Descripción del Problema
+Este reto consiste en procesar arreglos numéricos bajo la temática de ranking de fútbol sala, aplicando un ciclo acumulador, cálculo de porcentajes y proporciones sobre el rendimiento acumulado, y ajustando el resultado final con bonos y penalizaciones.
+
+## 🛠️ Reglas Aplicadas
+1. **Validación:** Se verifica que la lista de participantes contenga elementos.
+2. **Ciclo y Acumulador:** Se recorre el arreglo para obtener la suma total de los puntos base.
+3. **Cálculo Proporcional:** Se calcula un porcentaje específico (75%) del total acumulado para reflejar la proporción táctica en cancha.
+4. **Condicionales y Operación:** Se integra el bono, se resta la penalización y se clasifica al equipo ("equipo de playoff", "competitivo", "fase de grupos").
+
+## 💻 Instrucciones de Ejecución
+Ejecuta el archivo principal utilizando Node.js en la terminal:
+```bash
+node irma-arias.js
